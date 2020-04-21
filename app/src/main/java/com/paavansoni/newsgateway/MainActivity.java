@@ -32,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int GROUP_A = 10;
 
     private static final String TAG = "MainActivity";
-    static final String BROADCAST_FROM_SERVICE = "BROADCAST FROM SERVICE";
+
+    static final String ACTION_NEWS_STORY = "ACTION_NEWS_STORY";
+    static final String ACTION_MSG_TO_SERVICE = "ACTION_MSG_TO_SERVICE";
 
     private ArrayList<Source> sourceList = new ArrayList<>();
     private HashMap<String, ArrayList<Source>> sourceData = new HashMap<>();
@@ -49,6 +51,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent intent = new Intent(MainActivity.this, NewsStoryService.class);
+        startService(intent);
+
+        sampleReceiver = new SampleReceiver();
+
+        IntentFilter filter = new IntentFilter(ACTION_NEWS_STORY);
+        registerReceiver(sampleReceiver, filter);
+
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerList = findViewById(R.id.drawer_list);
 
@@ -57,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
                 new ListView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Source s = sourceList.get(position);
+                        Intent intent = new Intent();
+                        intent.setAction(ACTION_MSG_TO_SERVICE);
+                        intent.putExtra("SOURCE", s);
+                        sendBroadcast(intent);
                         mDrawerLayout.closeDrawer(mDrawerList);
                     }
                 }
@@ -123,6 +138,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setSources(ArrayList<Source> sources) {
+        sourceData = new HashMap<>();
+        sourceList = new ArrayList<>();
+
         for(Source s: sources){
             if(s.getCategory().isEmpty()){
                 s.setCategory("general");
@@ -167,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
             if (action == null)
                 return;
             switch (action) {
-                case BROADCAST_FROM_SERVICE:
+                case ACTION_NEWS_STORY:
                     break;
                 default:
                     Log.d(TAG, "onReceive: Unknown broadcast received");

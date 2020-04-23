@@ -41,7 +41,7 @@ public class NewsStoryService extends Service {
         }).start();
 
 
-        return Service.START_NOT_STICKY;
+        return Service.START_STICKY;
     }
 
     @Override

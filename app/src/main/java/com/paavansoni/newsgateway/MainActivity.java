@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.setAction(ACTION_MSG_TO_SERVICE);
                         intent.putExtra("SOURCE", s);
                         sendBroadcast(intent);
+                        setTitle(s.getName());
                         mDrawerLayout.closeDrawer(mDrawerList);
                     }
                 }

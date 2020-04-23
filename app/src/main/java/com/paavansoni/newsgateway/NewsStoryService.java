@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -43,14 +44,6 @@ public class NewsStoryService extends Service {
         return Service.START_NOT_STICKY;
     }
 
-    private void sendBroadcast(String msg) {
-        Intent intent = new Intent();
-        intent.setAction(MainActivity.ACTION_NEWS_STORY);
-        intent.putExtra("MESSAGE",msg);
-        sendBroadcast(intent);
-    }
-
-
     @Override
     public void onDestroy() {
         unregisterReceiver(serviceSampleReceiver);
@@ -62,8 +55,13 @@ public class NewsStoryService extends Service {
         new NewsStoryAsync(this).execute(id);
     }
 
-    public void setArticles(ArrayList<Article> sources) {
-
+    public void setArticles(ArrayList<Article> articles) {
+        Intent intent = new Intent();
+        intent.setAction(MainActivity.ACTION_NEWS_STORY);
+        Bundle args = new Bundle();
+        args.putSerializable("ARTICLES", articles);
+        intent.putExtra("BUNDLE", args);
+        sendBroadcast(intent);
     }
 
     class ServiceSampleReceiver extends BroadcastReceiver {

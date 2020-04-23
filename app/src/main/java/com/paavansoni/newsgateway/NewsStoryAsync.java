@@ -31,12 +31,9 @@ public class NewsStoryAsync extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        if(s == null){
-
-        }
-        else{
-            ArrayList<Article> sources = parseJSON(s);
-            service.setArticles(sources);
+        if(s != null){
+            ArrayList<Article> articles = parseJSON(s);
+            service.setArticles(articles);
         }
     }
 
@@ -81,7 +78,7 @@ public class NewsStoryAsync extends AsyncTask<String, Integer, String> {
                     url = "null";
                 }
                 if(article.has("urlToImage")){
-                    imageUrl = article.getString("urlImage");
+                    imageUrl = article.getString("urlToImage");
                 }
                 else{
                     imageUrl = "null";

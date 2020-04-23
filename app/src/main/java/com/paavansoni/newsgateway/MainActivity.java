@@ -4,6 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,19 +21,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+//import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+//import android.widget.TextView;
+//import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final int MENU_A = 100;
-    private static final int GROUP_A = 10;
 
     private static final String TAG = "MainActivity";
 
@@ -43,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    private List<Fragment> fragments;
+    private MyPageAdapter pageAdapter;
+    private ViewPager pager;
 
     private SampleReceiver sampleReceiver;
 
@@ -84,6 +90,12 @@ public class MainActivity extends AppCompatActivity {
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         );
+
+        fragments = new ArrayList<>();
+
+        pageAdapter = new MyPageAdapter(getSupportFragmentManager());
+        pager = findViewById(R.id.viewpager);
+        pager.setAdapter(pageAdapter);
 
         // Load the data
         if (sourceData.isEmpty()) {
@@ -170,10 +182,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void stopService(){
-
-    }
-
     /////////////////////////////////////////////////////////////
 
     class SampleReceiver extends BroadcastReceiver {
@@ -186,11 +194,75 @@ public class MainActivity extends AppCompatActivity {
                 return;
             switch (action) {
                 case ACTION_NEWS_STORY:
+                    Bundle b = intent.getBundleExtra("BUNDLE");
+                    if(b!=null){
+                        ArrayList<Article> a = (ArrayList<Article>) b.getSerializable("ARTICLES");
+                        reDoFragments(a);
+                    }
                     break;
                 default:
                     Log.d(TAG, "onReceive: Unknown broadcast received");
             }
 
         }
+    }
+
+    private void reDoFragments(ArrayList<Article> a) {
+        for (int i = 0; i < pageAdapter.getCount(); i++)
+            pageAdapter.notifyChangeInPosition(i);
+
+        fragments.clear();
+        for (int i = 0; i < a.size(); i++) {
+            fragments.add(
+                    ArticleFragment.newInstance(a.get(i), i+1, a.size()));
+            pageAdapter.notifyChangeInPosition(i);
+        }
+
+        pageAdapter.notifyDataSetChanged();
+        pager.setCurrentItem(0);
+    }
+
+//////////////////////////////////////
+
+    private class MyPageAdapter extends FragmentPagerAdapter {
+        private long baseId = 0;
+
+
+        MyPageAdapter(FragmentManager fm) {
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return POSITION_NONE;
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // give an ID different from position when position has been changed
+            return baseId + position;
+        }
+
+        /**
+         * Notify that the position of a fragment has been changed.
+         * Create a new ID for each position to force recreation of the fragment
+         * @param n number of items which have been changed
+         */
+        void notifyChangeInPosition(int n) {
+            // shift the ID returned by getItemId outside the range of all previous fragments
+            baseId += getCount() + n;
+        }
+
     }
 }

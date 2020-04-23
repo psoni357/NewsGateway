@@ -15,6 +15,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import androidx.appcompat.app.AlertDialog;
+
 public class NewsSourceAsync extends AsyncTask<String, Integer, String> {
     private static final String TAG = "SourceAsync";
 
@@ -32,7 +34,13 @@ public class NewsSourceAsync extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPostExecute(String s) {
         if(s == null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
 
+            builder.setMessage("Data on news sources not found.");
+            builder.setTitle("Error");
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
         else{
             ArrayList<Source> sources = parseJSON(s);

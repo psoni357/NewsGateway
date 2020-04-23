@@ -19,10 +19,6 @@ public class Source implements Serializable {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String getCategory() {
         return category;
     }

@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-//import android.util.Log;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +28,7 @@ import java.util.Date;
  * create an instance of this fragment.
  */
 public class ArticleFragment extends Fragment {
+    private static final String TAG = "Article Fragment";
 
     //private static final String TAG = "ArticleFragment";
 
@@ -112,7 +113,9 @@ public class ArticleFragment extends Fragment {
 
             ImageView pic = fragment_layout.findViewById(R.id.ArticlePhoto);
             Picasso picasso = new Picasso.Builder(container.getContext()).build();
-            picasso.load(currentArticle.getImageUrl())
+            Log.d(TAG, "onCreateView: Here is the image link " + currentArticle.getImageUrl());
+            String imageToGet = currentArticle.getImageUrl();
+            picasso.load(imageToGet)
                     .error(R.drawable.brokenimage)
                     .placeholder(R.drawable.placeholder)
                     .into(pic);

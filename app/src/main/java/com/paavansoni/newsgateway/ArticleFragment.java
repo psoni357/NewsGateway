@@ -113,7 +113,7 @@ public class ArticleFragment extends Fragment {
 
             ImageView pic = fragment_layout.findViewById(R.id.ArticlePhoto);
             Picasso picasso = new Picasso.Builder(container.getContext()).build();
-            Log.d(TAG, "onCreateView: Here is the image link " + currentArticle.getImageUrl());
+            //Log.d(TAG, "onCreateView: Here is the image link " + currentArticle.getImageUrl());
             String imageToGet = currentArticle.getImageUrl();
             picasso.load(imageToGet)
                     .error(R.drawable.brokenimage)

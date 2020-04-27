@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop(){
         unregisterReceiver(sampleReceiver);
+        Intent intent = new Intent(MainActivity.this, NewsStoryService.class);
+        stopService(intent);
         super.onStop();
     }
 

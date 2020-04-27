@@ -36,9 +36,7 @@ public class NewsStoryService extends Service {
 
                 IntentFilter filter = new IntentFilter(MainActivity.ACTION_MSG_TO_SERVICE);
                 registerReceiver(serviceSampleReceiver, filter);
-                while(running){
-
-                }
+                //while(running){ }
 
             }
         }).start();

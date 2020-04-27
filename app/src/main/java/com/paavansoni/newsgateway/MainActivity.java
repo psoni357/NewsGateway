@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         // Don't forget to unregister!
-        unregisterReceiver(sampleReceiver);
+        //unregisterReceiver(sampleReceiver);
         super.onDestroy();
     }
     // You need the 2 below to make the drawer-toggle work properly:

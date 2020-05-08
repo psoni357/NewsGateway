@@ -20,7 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 public class NewsSourceAsync extends AsyncTask<String, Integer, String> {
     private static final String TAG = "SourceAsync";
 
-    private static final String KEY = "b484f8c03c634d56b2422d190a795585";
+    private static final String KEY = "<<API_KEY_GOES_HERE>>"; // Within the <<...>> is where the API key should go
     private static final String dataURLstart = "https://newsapi.org/v2/sources?language=en&country=us&category=";
     private static final String dataURLend = "&apiKey=";
 

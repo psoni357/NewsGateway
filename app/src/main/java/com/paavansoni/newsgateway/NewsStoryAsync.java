@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class NewsStoryAsync extends AsyncTask<String, Integer, String> {
     private static final String TAG = "ArticleAsync";
 
-    private static final String KEY = "<<API_KEY_GOES_HERE>>"; // Within the <<...>> is where the API key should go
+    private static String KEY;
     private static final String dataURLstart = "https://newsapi.org/v2/everything?sources=";
     private static final String dataURLend = "&language=en&pageSize=100&apiKey=";
 
@@ -27,6 +27,7 @@ public class NewsStoryAsync extends AsyncTask<String, Integer, String> {
 
     NewsStoryAsync(NewsStoryService serv){
         this.service = serv;
+        KEY = service.getString(R.string.api_key);
     }
 
     @Override
